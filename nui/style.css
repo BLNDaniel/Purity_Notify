@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: var(--notification-align-horizontal, flex-end);
+    align-items: flex-start;
+    height: 100vh;
+    overflow: hidden;
+    background-color: transparent !important; 
+}
+
+#notifications {
+    display: flex;
+    flex-direction: column;
+    align-items: var(--notification-align-horizontal, flex-end);
+    gap: 10px;
+    padding: 20px;
+    max-height: 50vh; 
+    overflow-y: auto;
+    overflow-x: hidden; 
+    box-sizing: border-box; 
+}
+
+.notification {
+    background-color: var(--notify-bg-color, #323232);
+    color: var(--notify-text-color, #fff);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 1rem;
+    max-width: 350px;
+    word-wrap: break-word;
+    position: relative;
+    overflow: hidden;
+    animation: slide-in 0.5s ease-out, fade-out 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    opacity: 1;
+}
+
+.notification .icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.notification .content {
+    flex-grow: 1;
+}
+
+.notification .headline {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.notification .message {
+    font-size: 0.9rem;
+}
+
+.notification .progress-bar {
+    height: 4px;
+    background-color: var(--notify-progress-color, #ffffff);
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    animation: none;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes progress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
+}
+
+.notification.fade-out {
+    animation: fade-out 0.5s forwards;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+:root {
+    --notify-bg-color: #323232;
+    --notify-text-color: #fff;
+    --notify-progress-color: #ffffff;
+    --notification-position: 'top-right';
+    --notification-align-horizontal: flex-end; 
+}
+
+:root[style*="top-left"] {
+    --notification-align-horizontal: flex-start;
+}
+
+.notification.success {
+    --notify-bg-color: #28a745;
+    --notify-progress-color: #c3e6cb;
+}
+
+.notification.error {
+    --notify-bg-color: #dc3545;
+    --notify-progress-color: #f5c6cb;
+}
+
+.notification.info {
+    --notify-bg-color: #17a2b8;
+    --notify-progress-color: #bee5eb;
+}

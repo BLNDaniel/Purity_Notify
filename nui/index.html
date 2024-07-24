@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purity Notify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="notifications"></div>
+
+    <script>
+        window.addEventListener('message', function(event) {
+            if (event.data.action === "config") {
+                document.documentElement.style.setProperty('--notification-position', event.data.position);
+            }
+            if (event.data.action === "notify") {
+                let notify = event.data.notify;
+                createNotification(notify.text, notify.type, notify.duration);
+            }
+        });
+
+        function createNotification(text, type, duration) {
+            const notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+
+            const icon = document.createElement('div');
+            icon.className = 'icon';
+            icon.innerHTML = getIcon(type);
+
+            const content = document.createElement('div');
+            content.className = 'content';
+
+            const headline = document.createElement('div');
+            headline.className = 'headline';
+            headline.innerText = type.charAt(0).toUpperCase() + type.slice(1);
+
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerText = text;
+
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+
+            content.appendChild(headline);
+            content.appendChild(message);
+
+            notification.appendChild(icon);
+            notification.appendChild(content);
+            notification.appendChild(progressBar);
+
+            document.getElementById('notifications').appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 500);
+            }, duration);
+
+            progressBar.style.animation = `progress ${duration}ms linear`;
+        }
+
+        function getIcon(type) {
+            switch(type) {
+                case 'success': return '✅';
+                case 'error': return '❌';
+                case 'info': return 'ℹ️';
+                default: return '🔔';
+            }
+        }
+
+        window.onload = function() {
+            fetchConfig();
+        };
+
+        function fetchConfig() {
+            const config = {
+                position: 'top-right' // or 'top-left'
+            };
+            document.documentElement.style.setProperty('--notification-position', config.position);
+        }
+    </script>
+</body>
+</html>
